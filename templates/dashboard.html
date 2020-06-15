@@ -1,0 +1,58 @@
+{% load static %}
+<!--header-->
+{% include 'profile_header.html' %}
+<!--body-->
+<div class="tab_view bg-white px-3 py-2 px-lg-4 pb-md-4">
+    <h3 class="my-2">Teams</h3>
+    <div class="row d-none d-md-flex mb-5">
+        {% for team in teams %}
+        <div class="col-md-4 mb-3 mb-md-0">
+            <a href="{% url 'team_detail' team.id %}">
+            <div class="detail_box box-1 px-3 py-2 px-xl-4 py-xl-3 d-flex align-items-center">
+                <img src="/media/{{team.logo}}" class="mr-3">
+                <h4 class="m-0">{{team.name}}<span class="d-block"></span></h4>
+            </div></a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="tab_view bg-white px-3 py-2 px-lg-4 pb-md-4">
+    <h3 class="my-2">Matches</h3>
+    <div class="row d-none d-md-flex mb-5">
+        <div class="data_table_box">
+            <table width="100%" bgcolor="#ffffff" cellpadding="0" cellspacing="0" border="0">
+                <tbody>
+                    <tr>
+                        <th style="min-width: 20px">#</th>
+                        <th style="min-width: 25px">Team1</th>
+                        <th style="min-width: 30px">Team2</th>
+                        <th style="min-width: 30px">Result</th>
+                        <!-- <th style="min-width: 25px">Match Summary</th> -->
+                    </tr>
+                    {% for obj in matches %}
+                    <tr>                  
+                        <td>{{forloop.counter}}</td>                        
+                        <td>{{obj.team_1}} ({{obj.team_1_score}}/{{obj.team_1_wicket_down}})</td> 
+                        <td>{{obj.team_2}} ({{obj.team_2_score}}/{{obj.team_2_wicket_down}})</td>
+                        <td>
+                            {% if obj.status == 'Tie' %}
+                                Tie
+                            {% elif obj.status == 'Draw' %}
+                                Draw
+                            {% else %}
+                            {{obj.winning_team.name}} won by {% if obj.won_by_runs %} {{obj.won_by_runs}} runs {% else %} {{obj.won_by_wickets}} wickets {% endif %}
+                            {% endif %}
+                        </td>
+                        <!-- <td><a href="{% url 'match_summary' obj.id %}">Click Here</a></td> -->
+                    </tr>
+                    {% endfor %}                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--footer-->
+{% include 'footer.html' %}
+</body>
+</html>
